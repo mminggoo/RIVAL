@@ -129,7 +129,6 @@ for cfg_item in image_exps:
         mask = convert_tensor(mask)[0]
         
     for m in range(args.inner_round):
-        print('x_t', x_t.shape)
         if args.is_editing:
             x_t_in = torch.cat([x_t, x_t], dim=0)
         else:
@@ -137,7 +136,6 @@ for cfg_item in image_exps:
             x_t_append_norm = x_t.view(1, 4, -1)[:, :, idx].view(x_t.size())
             x_t_in = torch.cat([x_t, x_t_append_norm], dim=0)
         
-        print('x_t_in', x_t_in.shape)
         # for inpainting.
         if mask is not None:
             masked_latent = x_t.clone()[:, :, mask == 0].view(1, 4, -1) 
@@ -162,3 +160,5 @@ for cfg_item in image_exps:
             ).images
         
         utils.save_images([images[1]*255], name=png_name[:-4] + f"_{m}.png", offset_ratio=0.0)
+        utils.save_images([images[0]*255], name=png_name[:-4] + f"000_{m}.png", offset_ratio=0.0)
+        

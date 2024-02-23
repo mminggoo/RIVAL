@@ -124,7 +124,7 @@ class RIVALStableDiffusionPipeline(StableDiffusionPipeline):
                     encoder_hidden_states=prompt_embeds,
                     cross_attention_kwargs=cross_attention_kwargs,
                 ).sample
-
+                print("noise_pred", noise_pred.shape)
                 # perform guidance
                 if do_classifier_free_guidance:
                     noise_pred_uncond, noise_pred_text = noise_pred.chunk(2)
@@ -132,17 +132,17 @@ class RIVALStableDiffusionPipeline(StableDiffusionPipeline):
                     noise_pred += [noise_pred_text[:1]]
                     noise_pred += [noise_pred_uncond[1:] + guidance_scale * (noise_pred_text[1:] - noise_pred_uncond[1:])]
                     noise_pred = torch.cat(noise_pred, dim=0)
-                    
+                print("noise_pred", noise_pred.shape)
                 # compute the previous noisy sample x_t -> x_t-1
                 if noise_pred.shape[0] == 2 and t > t_early and is_adain:
                     noise_pred[1] = adain_latent(noise_pred[1:], noise_pred[0:1])[0]
-
+                print("noise_pred", noise_pred.shape)
                 # compute the previous noisy sample x_t -> x_t-1
                 latents = self.scheduler.step(noise_pred, t, latents, **extra_step_kwargs).prev_sample
-
+                print("latents", latents.shape)
                 if chain is not None:
                     latents[0] = chain[-i-2] # just replace the cond_latent 
-                    
+                print("latents", latents.shape)
                 if inpaint_mask is not None:
                     latents[1][:, inpaint_mask != 0] = latents[0][:, inpaint_mask != 0]
                     

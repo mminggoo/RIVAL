@@ -60,7 +60,16 @@ ldm_stable = RIVALStableDiffusionPipeline.from_pretrained(
 ).to(device)
 ldm_stable.scheduler = scheduler
 
-
+for module in ldm_stable.unet.modules():
+    if isinstance(module, CrossAttention):
+        # use a placeholder function for the original forward.
+        module.ori_forward = module.forward
+        module.cfg = attn_cfgs.copy()
+        module.init_step = 1000
+        module.step_size = module.init_step // cfgs.copy()["inference"]["ddim_step"]
+        module.t_align = module.cfg["t_align"]
+        module.editing_early_steps = args.editing_early_steps
+        module.forward = types.MethodType(new_forward, module)
         
 ldm_stable.enable_model_cpu_offload()
 ldm_stable.enable_xformers_memory_efficient_attention()

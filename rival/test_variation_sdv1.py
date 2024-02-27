@@ -24,7 +24,7 @@ parser.add_argument("--inf_config", type=str, default="configs/rival_variation.j
 parser.add_argument("--img_config", type=str, default="assets/images/configs_variation.json")
 parser.add_argument("--inner_round", type=int, default=1, help="number of images per reference")
 parser.add_argument("--exp_folder", type=str, default="out/variation_exps")
-parser.add_argument("--pretrained_model_path", type=str, default="CompVis/stable-diffusion-v1-4") # runwayml/stable-diffusion-v1-5 CompVis/stable-diffusion-v1-4
+parser.add_argument("--pretrained_model_path", type=str, default="runwayml/stable-diffusion-v1-5") # runwayml/stable-diffusion-v1-5 CompVis/stable-diffusion-v1-4
 parser.add_argument("--is_half", type=bool, default=False)
 parser.add_argument("--is_editing", type=bool, default=False)
 parser.add_argument("--editing_early_steps", type=int, default=1000)

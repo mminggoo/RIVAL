@@ -148,7 +148,7 @@ for cfg_item in image_exps:
                 prompts,
                 negative_prompt=["", neg_prompt],
                 generator=generator,
-                latents=x_t_in,
+                # latents=x_t_in,
                 num_images_per_prompt=1,
                 num_inference_steps = NUM_DDIM_STEPS,
                 guidance_scale = GUIDANCE_SCALE,
